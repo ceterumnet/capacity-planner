@@ -6,20 +6,34 @@ class ResourceAllocationsControllerTest < ActionController::TestCase
     assert_response :success
     assert_not_nil assigns(:resource_allocations)
   end
-
+  
   test "should get new" do
     get :new
     assert_response :success
   end
+  
+  test "should create resource_allocation" do
+    assert_difference('ResourceAllocation.count') do
+      post :create, :resource_allocation => { 
+        :project => projects(:alpha),
+        :resource => resources(:bob),
+        :date_dimension => date_dimensions(:f10) }
+    end
+    
+    assert_redirected_to resource_allocation_path(assigns(:resource_allocation))
+  end
 
-  # test "should create resource_allocation" do
-  #   assert_difference('ResourceAllocation.count') do
-  #     post :create, :resource_allocation => {  }
-  #   end
-  # 
-  #   assert_redirected_to resource_allocation_path(assigns(:resource_allocation))
-  # end
-
+  test "should fail to create resource_allocation" do
+    assert_no_difference('ResourceAllocation.count') do
+      post :create, :resource_allocation => { 
+        :project => projects(:alpha),
+        :resource => resources(:bob),
+        :date_dimension => date_dimensions(:f3) }
+    end
+    
+    assert_response :success
+  end
+  
   test "should show resource_allocation" do
     get :show, :id => resource_allocations(:one).to_param
     assert_response :success

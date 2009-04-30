@@ -1,6 +1,7 @@
 require 'test_helper'
 
 class ResourceAllocationTest < ActiveSupport::TestCase
+  fixtures :resources
   test "should belong to resource, project, date_dimension" do
     assert_difference "ResourceAllocation.count", 1 do
       ra = ResourceAllocation.new(
@@ -27,5 +28,12 @@ class ResourceAllocationTest < ActiveSupport::TestCase
     end
     
   end
-  
+
+  test "can update with hash" do
+    ra = resource_allocations(:one)
+    assert_not_nil(ra.project)
+    assert_not_nil(ra.date_dimension)
+    assert_not_nil(ra.resource)
+    assert(ra.update_attributes({}), ra.errors.entries.join("\n"))
+  end
 end
